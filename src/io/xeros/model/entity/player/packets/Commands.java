@@ -22,6 +22,7 @@ import io.xeros.content.bosses.nightmare.NightmareConstants;
 import io.xeros.content.combat.Hitmark;
 import io.xeros.content.combat.weapon.WeaponData;
 import io.xeros.content.commands.CommandManager;
+import io.xeros.content.commands.owner.Pos;
 import io.xeros.content.dialogue.DialogueBuilder;
 import io.xeros.content.dialogue.types.MakeItemDialogue;
 import io.xeros.content.event.eventcalendar.EventCalendarHelper;
@@ -35,6 +36,7 @@ import io.xeros.content.skills.Skill;
 import io.xeros.content.skills.farming.Plants;
 import io.xeros.content.tournaments.TourneyManager;
 import io.xeros.content.tutorial.TutorialDialogue;
+import io.xeros.content.wintertodt.Wintertodt;
 import io.xeros.content.wogw.Wogw;
 import io.xeros.content.worldevent.WorldEventContainer;
 import io.xeros.content.worldevent.impl.HesporiWorldEvent;
@@ -46,6 +48,7 @@ import io.xeros.model.SlottedItem;
 import io.xeros.model.definitions.ItemDef;
 import io.xeros.model.entity.HealthStatus;
 import io.xeros.model.entity.npc.NPC;
+import io.xeros.model.entity.npc.NPCDumbPathFinder;
 import io.xeros.model.entity.npc.NPCHandler;
 import io.xeros.model.entity.player.Boundary;
 import io.xeros.model.entity.player.ClientGameTimer;
@@ -154,6 +157,11 @@ public class Commands implements PacketType {
             if (isManagment) {
 
                 switch (args[0]) {
+
+                    case "tester":
+                        NPC npc = new NPC(Wintertodt.FLAME, new Position(c.getPosition().getX() + 3, c.getPosition().getY(), c.getPosition().getHeight()));
+                        NPCDumbPathFinder.walkTowards(npc, c.getPosition().getX(), c.getPosition().getY());
+                        return;
 
                     case "godmode":
                         boolean godmodeFlag = !c.getAttributes().getBoolean("GODMODE");

@@ -18,6 +18,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.xeros.content.wintertodt.Wintertodt;
 import io.xeros.model.AttributesSerializable;
 import io.xeros.model.cycleevent.EventHandler;
 import io.xeros.model.entity.npc.NPCHandler;
@@ -173,6 +174,7 @@ public class Server {
                 root.setLevel(isDebug() || isTest() ? ch.qos.logback.classic.Level.ALL : ch.qos.logback.classic.Level.INFO);
 
                 loadData();
+                Wintertodt.init();
                 Discord.writeServerSyncMessage("Server is now online.");
 
                 if (isDebug()) {

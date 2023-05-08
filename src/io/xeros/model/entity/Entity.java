@@ -16,6 +16,7 @@ import io.xeros.content.tournaments.TourneyManager;
 import io.xeros.model.*;
 import io.xeros.model.collisionmap.RegionProvider;
 import io.xeros.model.collisionmap.doors.Location;
+import io.xeros.model.entity.action.Action;
 import io.xeros.model.entity.npc.NPC;
 import io.xeros.model.entity.npc.NPCClipping;
 import io.xeros.model.entity.npc.stats.NpcBonus;
@@ -49,6 +50,25 @@ public abstract class Entity {
      * The {@link Entity} that has been determined the killer of this {@link Entity}
      */
     protected Entity killer;
+
+    public Action action;
+
+    public void setAction(Action action) {
+        if(this.action != null)
+            if(this.action.interruptable() == false)
+                return;
+            else
+                this.action.onStop();
+
+        this.action = action;
+        if(this.action != null)
+            this.action.onStart();
+    }
+
+    /**
+     * Pyromancer data
+     */
+    public boolean pyroSnowAttack;
     /**
      * The health of the entity
      */

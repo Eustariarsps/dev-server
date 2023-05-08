@@ -148,6 +148,7 @@ public class Walking implements PacketType {
 			c.canChangeAppearance = false;
 		}
 
+		c.setAction(null);
 		c.getPA().stopSkilling();
 		c.getPA().resetVariables();
 		SkillHandler.isSkilling[12] = false;

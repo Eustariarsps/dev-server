@@ -25,6 +25,7 @@ import io.xeros.model.entity.player.packets.objectoptions.impl.DarkAltar;
 import io.xeros.model.world.objects.GlobalObject;
 import io.xeros.util.Location3D;
 import io.xeros.util.Misc;
+import io.xeros.content.wintertodt.Wintertodt;
 
 import java.util.Arrays;
 import java.util.OptionalInt;
@@ -57,6 +58,15 @@ public class ObjectOptionTwo {
 			return;
 
 		switch (objectType) {
+			case 29320:
+				ObjectOptionOne.take(c, 5);
+				break;
+			case 29322:
+				if(Wintertodt.startDelay > 0)
+					c.getDH().sendStatement("The Wintertodt is currently subdued. There are "+Wintertodt.playersInRegion.size()+" players within", "the prison.");
+				else
+					c.getDH().sendStatement("The Wintertodt has "+(Wintertodt.health / (Wintertodt.MAX_HP / 100))+"% energy left. There are "+Wintertodt.playersInRegion.size()+" players within", "the prison.");
+				break;
 			case 11726:// Open Door @ Magic Hut
 				if (c.getItems().hasItemOnOrInventory(Items.LOCKPICK)) {
 					int pX = c.getX();

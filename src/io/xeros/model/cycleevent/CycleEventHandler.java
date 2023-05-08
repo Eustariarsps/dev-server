@@ -194,5 +194,11 @@ public class CycleEventHandler {
         int DIVINE_RANGE_POTION = 10045;
         int DIVINE_MAGIC_POTION = 10050;
         int SKILLING = 10049;
+        int WITERTODT_LOBBY = 10060;
+        int WINTERTODT_GAME_LOOP = 10061;
+        int WINTERTODT_BREAK_BRAZIER = 10062;
+        int WINTERTODT_MAGIC_ATTACK = 10063;
+        int WINTERTODT_MAGIC_ATTACK_CLEAR = 10064;
+        int WINTERTODT_ATTACK_PYROMANCER = 10065;
     }
 }

@@ -24,6 +24,7 @@ import io.xeros.content.commands.owner.Npc;
 import io.xeros.content.commands.owner.Pos;
 import io.xeros.content.minigames.pest_control.PestControl;
 import io.xeros.content.minigames.raids.Raids;
+import io.xeros.content.wintertodt.Wintertodt;
 import io.xeros.model.*;
 import io.xeros.model.collisionmap.PathChecker;
 import io.xeros.model.cycleevent.CycleEvent;
@@ -473,6 +474,9 @@ public class NPC extends Entity {
 	}
 
 	public void process() {
+		if(action != null)
+			action.tick();
+
 		Server.npcHandler.getNpcProcess().process(getIndex());
 	}
 
@@ -1160,6 +1164,12 @@ public class NPC extends Entity {
 	}
 
 	public void setDead(boolean dead) {
+		switch(getNpcId()) {
+			case Wintertodt.PYROMANCER:
+			case Wintertodt.INCAPACITATED_PYROMANCER:
+				if(dead) dead = false;
+				return;
+		}
 		isDead = dead;
 	}
 

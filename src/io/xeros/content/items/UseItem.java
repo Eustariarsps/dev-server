@@ -31,6 +31,7 @@ import io.xeros.content.skills.prayer.Bone;
 import io.xeros.content.skills.prayer.Prayer;
 import io.xeros.content.skills.slayer.SlayerUnlock;
 import io.xeros.content.trails.MasterClue;
+import io.xeros.content.wintertodt.Wintertodt;
 import io.xeros.content.wogw.Wogw;
 import io.xeros.model.Animation;
 import io.xeros.model.Items;
@@ -447,6 +448,16 @@ public class UseItem {
 			return;
 		if (OrnamentedItem.ornament(c, itemUsed, useWith))
 			return;
+
+		if (itemUsed == Wintertodt.REJUV_POT_UNF && useWith == Wintertodt.BRUMA_HERB || itemUsed == Wintertodt.BRUMA_HERB && useWith == Wintertodt.REJUV_POT_UNF) {
+			Wintertodt.mixHerb(c);
+			return;
+		}
+
+		if (itemUsed == 946 && useWith == Wintertodt.BRUMA_ROOT || itemUsed == Wintertodt.BRUMA_ROOT && useWith == 946) {
+			Wintertodt.fletch(c);
+			return;
+		}
 
 		if (itemUsed == 2 && useWith == 21726 || itemUsed == 21726 && useWith == 2) {
 			if (c.getItems().playerHasItem(2) && c.getItems().playerHasItem(21726)) {
@@ -1475,6 +1486,11 @@ public class UseItem {
 	public static void handleItemOnNPC(Player player, NPC npc, int itemId, int slot) {
 		player.npcClickIndex = npc.getIndex();
 		int npcId = npc.getNpcId();
+
+		if(npcId == Wintertodt.INCAPACITATED_PYROMANCER) {
+			Wintertodt.healPyromancer(player, npc, slot);
+			return;
+		}
 
 		if (PlatinumTokens.itemOnNpc(player, npc, itemId, slot))
 			return;

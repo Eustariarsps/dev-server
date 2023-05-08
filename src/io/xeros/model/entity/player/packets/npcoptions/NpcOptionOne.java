@@ -24,6 +24,7 @@ import io.xeros.content.skills.hunter.impling.Impling;
 import io.xeros.content.skills.mining.Mineral;
 import io.xeros.content.skills.thieving.Thieving;
 import io.xeros.content.tradingpost.Listing;
+import io.xeros.content.wintertodt.Wintertodt;
 import io.xeros.model.Npcs;
 import io.xeros.model.entity.npc.NPC;
 import io.xeros.model.entity.npc.NPCHandler;
@@ -70,6 +71,22 @@ public class NpcOptionOne {
 
 		NPC npc = NPCHandler.npcs[player.clickedNpcIndex];
 		switch (npcType) {
+			case Wintertodt.INCAPACITATED_PYROMANCER:
+				int slot = -1;
+
+				if(player.getItems().playerHasItem(Wintertodt.REJUV_POT_4))
+					slot = player.getItems().getInventoryItemSlot(Wintertodt.REJUV_POT_4);
+				else if(player.getItems().playerHasItem(Wintertodt.REJUV_POT_3))
+					slot = player.getItems().getInventoryItemSlot(Wintertodt.REJUV_POT_3);
+				else if(player.getItems().playerHasItem(Wintertodt.REJUV_POT_2))
+					slot = player.getItems().getInventoryItemSlot(Wintertodt.REJUV_POT_2);
+				else if(player.getItems().playerHasItem(Wintertodt.REJUV_POT_1))
+					slot = player.getItems().getInventoryItemSlot(Wintertodt.REJUV_POT_1);
+
+				if(slot != -1)
+					Wintertodt.healPyromancer(player, npc, slot);
+
+				break;
 		case 8184:
 			player.moveTo(TobConstants.LOBBY_TELEPORT_POSITION);
 			break;

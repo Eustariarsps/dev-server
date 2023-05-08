@@ -29,6 +29,9 @@ public class ObjectOptionThree {
 			return;
 
 		switch (objectType) {
+			case 29320:
+				ObjectOptionOne.take(c, 10);
+				break;
 		case 31858:
 		case 29150:
 			c.sendMessage("You switch to the lunar spellbook.");

@@ -36,6 +36,14 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public class Misc {
 
+	public static int min(int... values) {
+		int i = Integer.MAX_VALUE;
+		for(int i2 : values)
+			if(i2 < i)
+				i = i2;
+		return i;
+	}
+
 	public static String KEYBOARD_CHARACTERS_REGEX = "[a-zA-Z0-9 .,/<>?;:\"'`!@#$%^&*()\\[\\]{}_+=|\\\\-]*";
 	public static String KEYBOARD_CHARACTERS_LOWERCASE_REGEX = "[a-z0-9 .,/<>?;:\"'`!@#$%^&*()\\[\\]{}_+=|\\\\-]*";
 

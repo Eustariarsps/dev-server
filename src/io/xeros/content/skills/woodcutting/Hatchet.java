@@ -2,7 +2,7 @@ package io.xeros.content.skills.woodcutting;
 
 import io.xeros.model.entity.player.Player;
 
-enum Hatchet {
+public enum Hatchet {
 	BRONZE(1351, 1, 879, 1.0), 
 	IRON(1349, 1, 877, 1.0), 
 	STEEL(1353, 6, 875, .9), 

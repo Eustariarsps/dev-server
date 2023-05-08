@@ -23,10 +23,8 @@ import io.xeros.content.minigames.bounty_hunter.BountyHunterEmblem;
 import io.xeros.content.skills.agility.AgilityHandler;
 import io.xeros.content.skills.crafting.SpinMaterial;
 import io.xeros.content.tournaments.TourneyManager;
-import io.xeros.model.entity.player.Boundary;
-import io.xeros.model.entity.player.Player;
-import io.xeros.model.entity.player.PlayerAssistant;
-import io.xeros.model.entity.player.PrayerScrolls;
+import io.xeros.content.wintertodt.Wintertodt;
+import io.xeros.model.entity.player.*;
 import io.xeros.model.items.GameItem;
 import io.xeros.model.items.ItemCombination;
 import io.xeros.util.Misc;
@@ -47,6 +45,11 @@ public class TwoOptions {
 		Player other = c.getItemOnPlayer();
 
 		switch (c.dialogueAction) {
+			case -5000:
+				Wintertodt.removeGameItems(c);
+				c.moveTo(new Position(1630, 3958, 0));
+				c.wintertodtPoints = 0;
+				break;
 			case -500: // enter instance message
 				Player p2 = (Player) c.getAttributes().get("OTHER_INSTANCE");
 				if (p2 == null)

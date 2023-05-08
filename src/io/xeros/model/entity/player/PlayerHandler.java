@@ -687,4 +687,14 @@ public class PlayerHandler {
 	public static java.util.stream.Stream<Player> nonNullStream() {
 		return Arrays.stream(players).filter(Objects::nonNull);
 	}
+
+	public static ArrayList<Player> getPlayersByRegion(int regionId) {
+		ArrayList<Player> players = new ArrayList<Player>();
+		for (Player player : getPlayers()) {
+			if (player == null) continue;
+			if (player.getRegionId() == regionId)
+				players.add(player);
+		}
+		return players;
+	}
 }

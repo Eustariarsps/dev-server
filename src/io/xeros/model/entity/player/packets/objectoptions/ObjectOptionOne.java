@@ -55,6 +55,7 @@ import io.xeros.content.skills.woodcutting.Woodcutting;
 import io.xeros.content.tournaments.ViewingOrb;
 import io.xeros.content.tradingpost.Listing;
 import io.xeros.content.wilderness.SpiderWeb;
+import io.xeros.content.wintertodt.Wintertodt;
 import io.xeros.model.Items;
 import io.xeros.model.collisionmap.ObjectDef;
 import io.xeros.model.collisionmap.doors.DoorDefinition;
@@ -74,6 +75,7 @@ import io.xeros.model.entity.player.packets.objectoptions.impl.TrainCart;
 import io.xeros.model.entity.player.save.PlayerSave;
 import io.xeros.model.items.EquipmentSet;
 import io.xeros.model.items.GameItem;
+import io.xeros.model.items.ImmutableItem;
 import io.xeros.model.lobby.LobbyManager;
 import io.xeros.model.lobby.LobbyType;
 import io.xeros.model.multiplayersession.MultiplayerSessionType;
@@ -193,6 +195,92 @@ public class ObjectOptionOne {
 		}
 		Location3D location = new Location3D(obX, obY, c.heightLevel);
 		switch (objectType) {
+			case 29311:
+				Wintertodt.chopRoot(c);
+				break;
+			case 29315:
+				Wintertodt.takeHerb(c);
+				break;
+			case Wintertodt.BURNING_BRAZIER_ID:
+				Wintertodt.feedBrazier(c, object);
+				break;
+			case Wintertodt.BROKEN_BRAZIER_ID:
+				Wintertodt.fixBrazier(c, object);
+				break;
+			case Wintertodt.EMPTY_BRAZIER_ID:
+				Wintertodt.lightBrazier(c, object);
+				break;
+			case 29319:
+				if(c.getInventory().containsAll(new ImmutableItem(590))) {
+					c.sendMessage("You already have a tinderbox.");
+					return;
+				}
+
+				if(!c.getInventory().hasRoomInInventory(new ImmutableItem(590))) {
+					c.sendMessage("You need space in your inventory to take a tinderbox.");
+					return;
+				}
+				c.sendMessage("You take a tinderbox from the crate.");
+				c.getInventory().addToInventory(new ImmutableItem(590));
+				break;
+			case 29320:
+				take(c, 1);
+				break;
+			case 29317:
+				if(c.getInventory().containsAll(new ImmutableItem(946))) {
+					c.sendMessage("You already have a knife.");
+					return;
+				}
+
+				if(!c.getInventory().hasRoomInInventory(new ImmutableItem(946))) {
+					c.sendMessage("You need space in your inventory to take a knife.");
+					return;
+				}
+				c.sendMessage("You take a knife from the crate.");
+				c.getInventory().addToInventory(new ImmutableItem(946));
+				break;
+			case 29316:
+				if(c.getInventory().containsAll(new ImmutableItem(2347))) {
+					c.sendMessage("You already have a hammer.");
+					return;
+				}
+
+				if(!c.getInventory().hasRoomInInventory(new ImmutableItem(2347))) {
+					c.sendMessage("You need space in your inventory to take a hammer.");
+					return;
+				}
+				c.sendMessage("You take a hammer from the crate.");
+				c.getInventory().addToInventory(new ImmutableItem(2347));
+				break;
+			case 29318:
+				if(c.getInventory().containsAll(new ImmutableItem(1351))) {
+					c.sendMessage("You already have a axe.");
+					return;
+				}
+
+				if(!c.getInventory().hasRoomInInventory(new ImmutableItem(1351))) {
+					c.sendMessage("You need space in your inventory to take a axe.");
+					return;
+				}
+				c.sendMessage("You take a axe from the crate.");
+				c.getInventory().addToInventory(new ImmutableItem(1351));
+				break;
+			case 29322:
+				boolean entering = c.getY() < 3966;
+				if (entering) {
+					c.moveTo(new Position(1630, 3982, 0));
+				} else {
+					if(c.wintertodtPoints > 0) {
+						c.getDH().sendOption2("Leave and lose all progress", "Stay.");
+						c.dialogueAction = -5000;
+					} else {
+						Wintertodt.removeGameItems(c);
+						c.moveTo(new Position(1630, 3958, 0));
+						c.wintertodtPoints = 0;
+					}
+				}
+				break;
+
 			case 11726:// Open Door @ Magic Hut
 				if (c.getItems().hasItemOnOrInventory(Items.LOCKPICK)) {
 					int pX = c.getX();
@@ -3073,4 +3161,18 @@ public class ObjectOptionOne {
 			}
 		}
 
+		public static boolean take(Player player, int amount) {
+			if(amount > player.getInventory().freeInventorySlots())
+				amount = player.getInventory().freeInventorySlots();
+
+			if(!player.getInventory().hasRoomInInventory(new ImmutableItem(Wintertodt.REJUV_POT_UNF, amount))) {
+				player.sendMessage("You need space in your inventory to take an unfinished potion.");
+				return true;
+			}
+
+			player.sendMessage("You take an unfinished potion from the crate.");
+			player.getInventory().addToInventory(new ImmutableItem(Wintertodt.REJUV_POT_UNF, amount));
+
+			return true;
+		}
 }

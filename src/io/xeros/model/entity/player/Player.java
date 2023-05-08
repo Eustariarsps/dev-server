@@ -64,6 +64,7 @@ import io.xeros.model.collisionmap.RegionProvider;
 import io.xeros.model.collisionmap.doors.Location;
 import io.xeros.model.controller.Controller;
 import io.xeros.model.controller.ControllerRepository;
+import io.xeros.model.entity.action.Action;
 import io.xeros.model.entity.player.lock.PlayerLock;
 import io.xeros.model.entity.player.lock.Unlocked;
 import io.xeros.model.entity.player.migration.PlayerMigrationRepository;
@@ -207,6 +208,23 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class Player extends Entity {
 
     private static Logger logger = LoggerFactory.getLogger(Player.class);
+
+    /**
+     * Wintertodt
+     */
+    public int wintertodtPoints;
+
+    public final int getChunkX() {
+        return (getPosition().getX() >> 6);
+    }
+
+    public final int getChunkY() {
+        return (getPosition().getY() >> 6);
+    }
+
+    public final int getRegionId() {
+        return ((getChunkX() << 8) + getChunkY());
+    }
 
     public static final int playerHat = 0;
     public static final int playerCape = 1;
@@ -2347,6 +2365,10 @@ public class Player extends Entity {
     }
 
     public void process() {
+
+        if(action != null)
+            action.tick();
+
         getDonationRewards().tick();
         raidsClipFix();
         processQueuedActions();
