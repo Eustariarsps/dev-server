@@ -43,6 +43,7 @@ import io.xeros.content.privatemessaging.FriendsList;
 import io.xeros.content.minigames.raids.Raids;
 import io.xeros.content.miniquests.magearenaii.MageArenaII;
 import io.xeros.content.questing.Questing;
+import io.xeros.content.skills.hunter.birdhouse.PlayerBirdHouseData;
 import io.xeros.content.teleportation.inter.TeleportInterface;
 import io.xeros.content.tournaments.OutlastLeaderboardEntry;
 import io.xeros.content.tutorial.ModeSelection;
@@ -84,6 +85,7 @@ import io.xeros.model.entity.EntityReference;
 import io.xeros.model.entity.player.save.PlayerSave;
 import io.xeros.model.multiplayersession.MultiplayerSessionFinalizeType;
 import io.xeros.model.timers.TickTimer;
+import io.xeros.model.world.objects.GlobalObject;
 import io.xeros.net.PacketBuilder;
 import io.xeros.model.cycleevent.CycleEventHandler;
 import io.xeros.model.cycleevent.Event;
@@ -208,6 +210,14 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class Player extends Entity {
 
     private static Logger logger = LoggerFactory.getLogger(Player.class);
+
+    /**
+     * Birdhouses
+     */
+    public List<PlayerBirdHouseData> birdHouseData = new ArrayList<>();
+    public PlayerBirdHouseData selectedBirdhouseData;
+
+    public GlobalObject selectedObject;
 
     /**
      * Wintertodt

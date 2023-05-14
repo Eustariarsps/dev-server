@@ -13,6 +13,8 @@ import io.xeros.content.minigames.raids.Raids;
 import io.xeros.content.skills.FlaxPicking;
 import io.xeros.content.skills.agility.AgilityHandler;
 import io.xeros.content.skills.hunter.Hunter;
+import io.xeros.content.skills.hunter.birdhouse.Birdhouses;
+import io.xeros.content.skills.hunter.birdhouse.PlayerBirdHouseData;
 import io.xeros.content.skills.smithing.CannonballSmelting;
 import io.xeros.content.skills.thieving.Thieving.Stall;
 import io.xeros.content.tradingpost.Listing;
@@ -58,6 +60,27 @@ public class ObjectOptionTwo {
 			return;
 
 		switch (objectType) {
+			case 30555:
+			case 30558:
+			case 30561:
+			case 30564:
+			case 31829:
+			case 31832:
+			case 31835:
+			case 31838:
+			case 31841:
+			case 30554:
+			case 30557:
+			case 30560:
+			case 30563:
+			case 31828:
+			case 31831:
+			case 31834:
+			case 31837:
+			case 31840:
+				Birdhouses.checkSeeds(c, object);
+				break;
+
 			case 29320:
 				ObjectOptionOne.take(c, 5);
 				break;

@@ -2955,7 +2955,7 @@ public class DialogueHandler {
 		c.getPA().sendChatboxInterface(2459);
 	}
 
-	private void sendOption3(String s, String s1, String s2) {
+	public void sendOption3(String s, String s1, String s2) {
 		c.dialogueOptions = 3;
 		c.getPA().sendFrame126("Select an Option", 2470);
 		c.getPA().sendFrame126(s, 2471);

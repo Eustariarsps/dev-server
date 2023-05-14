@@ -25,8 +25,10 @@ import io.xeros.content.skills.crafting.SpinMaterial;
 import io.xeros.content.tournaments.TourneyManager;
 import io.xeros.content.wintertodt.Wintertodt;
 import io.xeros.model.entity.player.*;
+import io.xeros.model.entity.player.save.PlayerSave;
 import io.xeros.model.items.GameItem;
 import io.xeros.model.items.ItemCombination;
+import io.xeros.model.world.objects.GlobalObject;
 import io.xeros.util.Misc;
 import io.xeros.util.discord.Discord;
 import io.xeros.util.logging.player.EmptyInventoryLog;
@@ -44,7 +46,18 @@ public class TwoOptions {
 	public static void handleOption1(Player c) {  //see This handles option 1 if u scroll down ull see the section two
 		Player other = c.getItemOnPlayer();
 
+		System.out.println("c.dialogueAction: " + c.dialogueAction);
+
 		switch (c.dialogueAction) {
+			case 902130:
+				c.startAnimation(827);
+				c.getPA().object(new GlobalObject(c.selectedBirdhouseData.oldObjectId, c.selectedBirdhouseData.birdhousePosition, c.selectedBirdhouseData.rotation, c.selectedBirdhouseData.type));
+				c.birdHouseData.remove(c.selectedBirdhouseData);
+				c.selectedBirdhouseData = null;
+				c.getPA().closeAllWindows();
+				c.dialogueAction = -1;
+				PlayerSave.saveGame(c);
+				break;
 			case -5000:
 				Wintertodt.removeGameItems(c);
 				c.moveTo(new Position(1630, 3958, 0));
@@ -1106,6 +1119,9 @@ public class TwoOptions {
 	public static void handleOption2(Player c) { //under this code is the dialogues OpTion two codIng ooh okay, and its the same id
 
 		switch (c.dialogueAction) {
+			case 902130:
+				c.getPA().closeAllWindows();
+				break;
 		case 1004:
 			c.getPA().closeAllWindows();
 			break;

@@ -21,6 +21,7 @@ import io.xeros.content.item.lootable.impl.SerenChest;
 import io.xeros.content.item.lootable.impl.UnbearableChest;
 import io.xeros.content.skills.Cooking;
 import io.xeros.content.skills.agility.AgilityHandler;
+import io.xeros.content.skills.hunter.birdhouse.PlayerBirdHouseData;
 import io.xeros.content.skills.hunter.impling.PuroPuro;
 import io.xeros.content.skills.runecrafting.ouriana.OurianaAltar;
 import io.xeros.content.skills.runecrafting.ouriana.OurianaBanker;
@@ -50,7 +51,17 @@ public class ClickObject implements PacketType {
     }
 
     private static void walkTo(Player player, int option) {
-        WorldObject object = getObject(player, player.objectId, player.objectX, player.objectY);
+
+        int objectId = player.objectId;
+
+        for(PlayerBirdHouseData playerBirdHouseData : player.birdHouseData) {
+            if(playerBirdHouseData.birdhousePosition.equals(new Position(player.objectX, player.objectY, player.getHeight()))) {
+                objectId = playerBirdHouseData.oldObjectId;
+                break;
+            }
+        }
+
+        WorldObject object = getObject(player, objectId, player.objectX, player.objectY);
         if (object != null) {
             Position size = object.getObjectSize();
             Server.getLogging().write(new ClickObjectLog(player, object, option));
@@ -82,6 +93,7 @@ public class ClickObject implements PacketType {
                 player.setTickable(new WalkToTickable(player, object.getPosition(), size.getX(), size.getY(), player1 -> finishObjectClick(player1, option, object)));
             }
         } else {
+            System.out.println("213213123213213123");
             player.stopMovement();
         }
     }

@@ -6,6 +6,7 @@ import io.xeros.content.achievement_diary.impl.ArdougneDiaryEntry;
 import io.xeros.content.achievement_diary.impl.FaladorDiaryEntry;
 import io.xeros.content.achievement_diary.impl.VarrockDiaryEntry;
 import io.xeros.content.items.TomeOfFire;
+import io.xeros.content.skills.hunter.birdhouse.Birdhouses;
 import io.xeros.model.entity.player.Boundary;
 import io.xeros.model.entity.player.Player;
 import io.xeros.model.items.GameItem;
@@ -23,6 +24,9 @@ public class ThreeOptions {
 	 */
 	public static void handleOption1(Player c) {
 		switch (c.dialogueAction) {
+			case 342423:
+				Birdhouses.checkSeeds(c, c.selectedObject);
+				break;
 		case 265:
 			TomeOfFire.store(c);
             break;
@@ -129,6 +133,9 @@ public class ThreeOptions {
 	public static void handleOption2(Player c) {
 
 		switch (c.dialogueAction) {
+			case 342423:
+				Birdhouses.dismantle(c, c.selectedObject);
+				break;
 		case 265:
 			TomeOfFire.remove(c);
 		    break;
@@ -238,6 +245,10 @@ public class ThreeOptions {
 	 */
 	public static void handleOption3(Player c) {
 		switch (c.dialogueAction) {
+
+			case 342423:
+				c.getPA().closeAllWindows();
+				break;
 		case 265:
 			c.getPA().removeAllWindows();
 			break;

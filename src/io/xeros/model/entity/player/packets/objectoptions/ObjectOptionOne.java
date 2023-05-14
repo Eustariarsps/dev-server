@@ -47,6 +47,9 @@ import io.xeros.content.skills.agility.impl.rooftop.RooftopVarrock;
 import io.xeros.content.skills.crafting.BraceletMaking;
 import io.xeros.content.skills.crafting.JewelryMaking;
 import io.xeros.content.skills.hunter.Hunter;
+import io.xeros.content.skills.hunter.birdhouse.BirdhouseData;
+import io.xeros.content.skills.hunter.birdhouse.PlayerBirdHouseData;
+import io.xeros.content.skills.hunter.birdhouse.actions.PlaceBirdhouse;
 import io.xeros.content.skills.runecrafting.Runecrafting;
 import io.xeros.content.skills.smithing.CannonballSmelting;
 import io.xeros.content.skills.thieving.Thieving.Stall;
@@ -108,6 +111,43 @@ public class ObjectOptionOne {
 		c.facePosition(obX, obY);
 		c.boneOnAltar = false;
 		Tree tree = Tree.forObject(objectType);
+
+		//Birdhouses
+		if(objectType >= 30565 && objectType <= 30568) {
+			boolean foundData = false;
+			PlayerBirdHouseData birdHouseData = null;
+			for(PlayerBirdHouseData playerBirdHouseData : c.birdHouseData) {
+				if(playerBirdHouseData.birdhousePosition.equals(object.getPosition())) {
+					birdHouseData = playerBirdHouseData;
+					foundData = true;
+					break;
+				}
+			}
+
+			if(foundData) {
+				c.getDH().sendOption2("Check seed levels.", "Dismantle my trap.", "Do nothing.");
+				c.selectedBirdhouseData = birdHouseData;
+				c.dialogueAction = 9999999;
+				return;
+			} else {
+				BirdhouseData birdhouseData = null;
+				for(int index = BirdhouseData.values().length - 1; index >= 0; index--) {
+					BirdhouseData data = BirdhouseData.values()[index];
+					if(c.getInventory().containsAll(new ImmutableItem(data.birdHouseId)) && c.playerLevel[21] >= data.hunterData[0]) {
+						birdhouseData = data;
+						break;
+					}
+				}
+				if(birdhouseData != null) {
+					c.startAnimation(827);
+					c.setAction(new PlaceBirdhouse(c, birdhouseData, object));
+					return;
+				} else {
+					c.sendMessage("You do not have a birdhouse with the required hunter level to build here.");
+					return;
+				}
+			}
+		}
 
 		RaidObjects.clickObject1(c, objectType, obX, obY);
 		if (tree != null) {
@@ -195,6 +235,21 @@ public class ObjectOptionOne {
 		}
 		Location3D location = new Location3D(obX, obY, c.heightLevel);
 		switch (objectType) {
+
+			case 30555:
+			case 30558:
+			case 30561:
+			case 30564:
+			case 31829:
+			case 31832:
+			case 31835:
+			case 31838:
+			case 31841:
+				c.getDH().sendOption3("Check seed levels.", "Dismantle my trap.", "Do nothing.");
+				c.dialogueAction = 342423;
+				c.selectedObject = object;
+				break;
+
 			case 29311:
 				Wintertodt.chopRoot(c);
 				break;

@@ -36,6 +36,7 @@ import io.xeros.content.lootbag.LootingBag;
 import io.xeros.content.lootbag.LootingBagItem;
 import io.xeros.content.privatemessaging.FriendType;
 import io.xeros.content.privatemessaging.FriendsListEntry;
+import io.xeros.content.skills.hunter.birdhouse.Birdhouses;
 import io.xeros.content.skills.slayer.SlayerMaster;
 import io.xeros.content.skills.slayer.SlayerUnlock;
 import io.xeros.content.skills.slayer.Task;
@@ -156,6 +157,12 @@ public class PlayerSave {
             p.getFarming().load();
         } catch (Exception e) {
             logger.error("Error while loading farming {}", playerName, e);
+            e.printStackTrace();
+        }
+        try {
+            Birdhouses.load(p, playerName);
+        } catch (Exception e) {
+            logger.error("Error while loading birdhouses {}", playerName, e);
             e.printStackTrace();
         }
 
@@ -2401,6 +2408,9 @@ public class PlayerSave {
             characterfile.newLine();
             characterfile.newLine();
             characterfile.close();
+
+            Birdhouses.save(p);
+
         } catch (Exception ioexception) {
             logger.error("Error while saving player {}", p, ioexception);
             ioexception.printStackTrace();

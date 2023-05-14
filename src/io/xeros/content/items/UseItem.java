@@ -27,6 +27,12 @@ import io.xeros.content.skills.Skill;
 import io.xeros.content.skills.crafting.*;
 import io.xeros.content.skills.firemake.Firemaking;
 import io.xeros.content.skills.herblore.*;
+import io.xeros.content.skills.hunter.birdhouse.BirdhouseData;
+import io.xeros.content.skills.hunter.birdhouse.BirdhouseSeedData;
+import io.xeros.content.skills.hunter.birdhouse.PlayerBirdHouseData;
+import io.xeros.content.skills.hunter.birdhouse.actions.CreateBirdHouse;
+import io.xeros.content.skills.hunter.birdhouse.actions.FillBirdhouse;
+import io.xeros.content.skills.hunter.birdhouse.actions.PlaceBirdhouse;
 import io.xeros.content.skills.prayer.Bone;
 import io.xeros.content.skills.prayer.Prayer;
 import io.xeros.content.skills.slayer.SlayerUnlock;
@@ -43,7 +49,9 @@ import io.xeros.model.entity.player.Player;
 import io.xeros.model.entity.player.PlayerAssistant;
 import io.xeros.model.entity.player.packets.objectoptions.impl.DarkAltar;
 import io.xeros.model.items.GameItem;
+import io.xeros.model.items.ImmutableItem;
 import io.xeros.model.items.ItemCombination;
+import io.xeros.model.world.objects.GlobalObject;
 import io.xeros.util.Misc;
 import io.xeros.util.logging.player.ItemOnItemLog;
 
@@ -156,6 +164,7 @@ public class UseItem {
 		if (!c.getItems().playerHasItem(itemId, 1))
 			return;
 		c.clickObjectType = 0;
+		GlobalObject object = new GlobalObject(objectID, objectX, objectY, c.heightLevel);
 		ObjectDef def = ObjectDef.getObjectDef(objectID);
 
 		if (def != null) {
@@ -172,7 +181,68 @@ public class UseItem {
 				}
 			}
 		}
+
+		if(objectID >= 30565 && objectID <= 30568) {
+			BirdhouseData birdhouseData = BirdhouseData.forBirdhouse(itemId);
+
+			if(birdhouseData == null) {
+				System.out.println("21312321321321");
+				return;
+			}
+
+			if(c.playerLevel[21] < birdhouseData.hunterData[0]) {
+				c.sendMessage("You need at least level "+birdhouseData.hunterData[0]+" Hunter to place that.");
+				return ;
+			}
+
+			c.startAnimation(827);
+			c.setAction(new PlaceBirdhouse(c, birdhouseData, object));
+			return;
+		}
+
 		switch (objectID) {
+			case 30554:
+			case 30557:
+			case 30560:
+			case 30563:
+			case 31828:
+			case 31831:
+			case 31834:
+			case 31837:
+			case 31840:
+				BirdhouseSeedData seedData = BirdhouseSeedData.forId(itemId);
+				if(seedData == null) return;
+
+				boolean foundData = false;
+				PlayerBirdHouseData birdHouseData = null;
+				for (PlayerBirdHouseData playerBirdHouseData : c.birdHouseData) {
+					if (playerBirdHouseData.birdhousePosition.equals(object.getPosition())) {
+						birdHouseData = playerBirdHouseData;
+						foundData = true;
+						break;
+					}
+				}
+
+				if (foundData) {
+					int requiredAmount = seedData.seedAmount;
+
+					if(birdHouseData.seedAmount >= 10) return;
+
+					int requiredSeeds = requiredAmount == 5 ? requiredAmount - (birdHouseData.seedAmount / 2) : requiredAmount - birdHouseData.seedAmount;
+					int itemAmount = c.getItems().getItemAmount(itemId) > 10 ? 10 : c.getItems().getItemAmount(itemId);
+
+					if(itemAmount > requiredSeeds)
+						itemAmount = requiredSeeds;
+
+					if(requiredAmount == 5)
+						itemAmount *= 2;
+
+					c.startAnimation(827);
+					c.setAction(new FillBirdhouse(c, birdHouseData, new ImmutableItem(itemId), itemAmount));
+
+					return;
+				}
+				break;
 			case 33311:
 				c.objectYOffset = 5;
 				c.objectXOffset = 5;
@@ -427,6 +497,28 @@ public class UseItem {
 					c.getDH().sendStatement("You don't have all of the items required for this combination.");
 					return;
 				}
+			}
+		}
+
+		if (itemUsed == 8792 || useWith ==  8792) {
+			int logUsed = itemUsed == 8792 ? useWith : itemUsed;
+			BirdhouseData birdHouseData = BirdhouseData.forLog(logUsed);
+			if(birdHouseData != null) {
+
+				if(!c.getInventory().containsAll(new ImmutableItem(2347), new ImmutableItem(1755))) {
+					c.getDH().sendStatement("You need a hammer and chisel to make a birdhouse trap.");
+					return;
+				}
+
+				if(c.playerLevel[12] < birdHouseData.craftingData[0]) {
+					c.getDH().sendStatement("You need level "+birdHouseData.craftingData[0]+" Crafting to combine those.");
+					return;
+				}
+
+				c.startAnimation(7057);
+				c.setAction(new CreateBirdHouse(c, birdHouseData));
+
+				return;
 			}
 		}
 

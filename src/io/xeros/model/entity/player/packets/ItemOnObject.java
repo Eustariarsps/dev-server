@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import io.xeros.Server;
 import io.xeros.content.items.UseItem;
+import io.xeros.content.skills.hunter.birdhouse.PlayerBirdHouseData;
 import io.xeros.model.collisionmap.WorldObject;
 import io.xeros.model.cycleevent.CycleEvent;
 import io.xeros.model.cycleevent.CycleEventContainer;
@@ -47,7 +48,15 @@ public class ItemOnObject implements PacketType {
 		c.xInterfaceId = -1;
 		c.getPA().stopSkilling();
 
-		WorldObject object = ClickObject.getObject(c, objectId, objectX, objectY);
+		int worldObjectId = objectId;
+		for(PlayerBirdHouseData playerBirdHouseData : c.birdHouseData) {
+			if(playerBirdHouseData.birdhousePosition.equals(new Position(objectX, objectY, c.getHeight()))) {
+				worldObjectId = playerBirdHouseData.oldObjectId;
+				break;
+			}
+		}
+
+		WorldObject object = ClickObject.getObject(c, worldObjectId, objectX, objectY);
 
 		if (object == null) {
 			return;
@@ -65,8 +74,7 @@ public class ItemOnObject implements PacketType {
 			return;
 		}
 		DuelSession duelSession = (DuelSession) Server.getMultiplayerSessionListener().getMultiplayerSession(c, MultiplayerSessionType.DUEL);
-		if (Objects.nonNull(duelSession) && duelSession.getStage().getStage() > MultiplayerSessionStage.REQUEST
-				&& duelSession.getStage().getStage() < MultiplayerSessionStage.FURTHER_INTERATION) {
+		if (Objects.nonNull(duelSession) && duelSession.getStage().getStage() > MultiplayerSessionStage.REQUEST && duelSession.getStage().getStage() < MultiplayerSessionStage.FURTHER_INTERATION) {
 			c.sendMessage("Your actions have declined the duel.");
 			duelSession.getOther(c).sendMessage("The challenger has declined the duel.");
 			duelSession.finish(MultiplayerSessionFinalizeType.WITHDRAW_ITEMS);
